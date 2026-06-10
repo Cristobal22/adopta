@@ -1,10 +1,10 @@
 // sw.js - Service Worker for Adopta PWA
 const CACHE_NAME = 'adopta-cache-v1';
 const ASSETS_TO_CACHE = [
-  '/',
-  '/favicon.ico',
-  '/images/pwa-icon.png',
-  '/manifest.json'
+  './',
+  './favicon.ico',
+  './images/pwa-icon.png',
+  './manifest.json'
 ];
 
 self.addEventListener('install', (event) => {
@@ -87,9 +87,9 @@ self.addEventListener('push', (event) => {
 
   const options = {
     body: data.body,
-    icon: '/images/pwa-icon.png',
-    badge: '/images/pwa-icon.png',
-    data: data.url || '/',
+    icon: './images/pwa-icon.png',
+    badge: './images/pwa-icon.png',
+    data: data.url || './',
     vibrate: [100, 50, 100],
     actions: [
       { action: 'open', title: 'Ver Detalle' }
@@ -105,7 +105,7 @@ self.addEventListener('push', (event) => {
 self.addEventListener('notificationclick', (event) => {
   event.notification.close();
   
-  let url = event.notification.data || '/';
+  let url = event.notification.data || './';
   
   event.waitUntil(
     clients.matchAll({ type: 'window', includeUncontrolled: true }).then((windowClients) => {

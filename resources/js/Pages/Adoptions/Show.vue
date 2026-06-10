@@ -469,15 +469,19 @@ export default {
     // Mouse drawing actions
     const startDrawing = (e) => {
       isDrawing.value = true
-      const { offsetX, offsetY } = e
+      const rect = sigCanvas.value.getBoundingClientRect()
+      const x = (e.clientX - rect.left) * (sigCanvas.value.width / rect.width)
+      const y = (e.clientY - rect.top) * (sigCanvas.value.height / rect.height)
       context.value.beginPath()
-      context.value.moveTo(offsetX, offsetY)
+      context.value.moveTo(x, y)
     }
 
     const draw = (e) => {
       if (!isDrawing.value) return
-      const { offsetX, offsetY } = e
-      context.value.lineTo(offsetX, offsetY)
+      const rect = sigCanvas.value.getBoundingClientRect()
+      const x = (e.clientX - rect.left) * (sigCanvas.value.width / rect.width)
+      const y = (e.clientY - rect.top) * (sigCanvas.value.height / rect.height)
+      context.value.lineTo(x, y)
       context.value.stroke()
       hasDrawn.value = true
     }
@@ -490,8 +494,8 @@ export default {
     const getTouchPos = (e) => {
       const rect = sigCanvas.value.getBoundingClientRect()
       return {
-        x: e.touches[0].clientX - rect.left,
-        y: e.touches[0].clientY - rect.top
+        x: (e.touches[0].clientX - rect.left) * (sigCanvas.value.width / rect.width),
+        y: (e.touches[0].clientY - rect.top) * (sigCanvas.value.height / rect.height)
       }
     }
 

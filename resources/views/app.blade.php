@@ -31,9 +31,9 @@
         @inertiaHead
         
         <!-- PWA Manifest & Meta Tags -->
-        <link rel="manifest" href="/manifest.json">
+        <link rel="manifest" href="{{ asset('manifest.json') }}">
         <meta name="theme-color" content="#ff6b4a">
-        <link rel="apple-touch-icon" href="/images/pwa-icon.png">
+        <link rel="apple-touch-icon" href="{{ asset('images/pwa-icon.png') }}">
     </head>
     <body class="antialiased">
         @inertia
@@ -42,7 +42,7 @@
         <script>
             if ('serviceWorker' in navigator) {
                 window.addEventListener('load', () => {
-                    navigator.serviceWorker.register('/sw.js')
+                    navigator.serviceWorker.register('{{ asset("sw.js") }}')
                         .then(reg => console.log('Service Worker registered successfully!', reg.scope))
                         .catch(err => console.error('Service Worker registration failed:', err));
                 });

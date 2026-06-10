@@ -317,7 +317,8 @@ export default {
     const sendSubscriptionToServer = async (subscription) => {
       const csrfToken = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '';
       try {
-        await fetch('/api/push-subscriptions', {
+        const base = window.location.pathname.startsWith('/adopta/public') ? '/adopta/public' : '';
+        await fetch(`${base}/api/push-subscriptions`, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

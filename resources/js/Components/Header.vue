@@ -1,19 +1,27 @@
 <template>
   <header class="header">
-    <Link href="/" class="logo">
+    <Link href="/" class="logo" @click="isMenuOpen = false">
       <span class="logo-icon">🐾</span>
       <span class="logo-text">Adopta<span class="logo-dot">.</span></span>
     </Link>
-    <nav class="nav">
-      <Link href="/" class="nav-link" :class="{ active: isActive('/') }">Inicio</Link>
-      <Link href="/pets" class="nav-link" :class="{ active: isActive('/pets') }">Adoptar</Link>
-      <Link href="/bazar" class="nav-link" :class="{ active: isActive('/bazar') }">Bazar Animal</Link>
-      <Link href="/nosotros" class="nav-link" :class="{ active: isActive('/nosotros') }">Nosotros</Link>
+    
+    <!-- Botón Hamburguesa Móvil -->
+    <button class="menu-toggle" @click="isMenuOpen = !isMenuOpen" :aria-expanded="isMenuOpen" aria-label="Abrir menú de navegación">
+      <span class="bar" :class="{ 'bar-top-active': isMenuOpen }"></span>
+      <span class="bar" :class="{ 'bar-middle-active': isMenuOpen }"></span>
+      <span class="bar" :class="{ 'bar-bottom-active': isMenuOpen }"></span>
+    </button>
+    
+    <nav class="nav" :class="{ 'nav-open': isMenuOpen }">
+      <Link href="/" class="nav-link" :class="{ active: isActive('/') }" @click="isMenuOpen = false">Inicio</Link>
+      <Link href="/pets" class="nav-link" :class="{ active: isActive('/pets') }" @click="isMenuOpen = false">Adoptar</Link>
+      <Link href="/bazar" class="nav-link" :class="{ active: isActive('/bazar') }" @click="isMenuOpen = false">Bazar Animal</Link>
+      <Link href="/nosotros" class="nav-link" :class="{ active: isActive('/nosotros') }" @click="isMenuOpen = false">Nosotros</Link>
       <template v-if="user">
-        <Link href="/dashboard" class="btn btn-secondary btn-sm">Dashboard</Link>
+        <Link href="/dashboard" class="btn btn-secondary btn-sm" @click="isMenuOpen = false">Dashboard</Link>
       </template>
       <template v-else>
-        <Link href="/login" class="btn btn-secondary btn-sm">Ingresar</Link>
+        <Link href="/login" class="btn btn-secondary btn-sm" @click="isMenuOpen = false">Ingresar</Link>
       </template>
     </nav>
   </header>
@@ -21,10 +29,11 @@
 
 <script setup>
 import { Link, usePage } from '@inertiajs/vue3'
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 
 const page = usePage()
 const user = computed(() => page.props.auth.user)
+const isMenuOpen = ref(false)
 
 const isActive = (path) => {
   if (path === '/') {
@@ -118,5 +127,95 @@ const isActive = (path) => {
 
 .btn-secondary:hover {
   background: rgba(255, 255, 255, 0.15);
+}
+
+/* Hamburguesa móvil */
+.menu-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 24px;
+  height: 18px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  z-index: 105;
+}
+
+.menu-toggle .bar {
+  width: 100%;
+  height: 2px;
+  background-color: var(--color-text-main);
+  border-radius: 4px;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.menu-toggle .bar-top-active {
+  transform: translateY(8px) rotate(45deg);
+}
+
+.menu-toggle .bar-middle-active {
+  opacity: 0;
+  transform: scale(0);
+}
+
+.menu-toggle .bar-bottom-active {
+  transform: translateY(-8px) rotate(-45deg);
+}
+
+@media (max-width: 768px) {
+  .menu-toggle {
+    display: flex;
+  }
+
+  .nav {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: var(--color-bg);
+    border-bottom: 1px solid rgba(43, 37, 33, 0.08);
+    box-shadow: 0 15px 30px rgba(43, 37, 33, 0.08);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0 2rem;
+    max-height: 0;
+    opacity: 0;
+    visibility: hidden;
+    overflow: hidden;
+    transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1), 
+                padding 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.3s ease,
+                visibility 0.3s ease;
+    z-index: 100;
+  }
+
+  .nav.nav-open {
+    max-height: 400px;
+    padding: 1.5rem 2rem 2.5rem 2rem;
+    opacity: 1;
+    visibility: visible;
+  }
+
+  .nav-link {
+    display: block;
+    padding: 1rem 0;
+    border-bottom: 1px solid rgba(43, 37, 33, 0.05);
+    width: 100%;
+    font-size: 1.05rem;
+  }
+
+  .nav-link:last-of-type {
+    border-bottom: none;
+  }
+
+  .btn {
+    margin-top: 1.25rem;
+    width: 100%;
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
 }
 </style>
