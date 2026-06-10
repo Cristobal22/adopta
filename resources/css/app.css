@@ -1,0 +1,417 @@
+/* Core Design Tokens & CSS Reset */
+:root {
+  --color-bg: #FAF8F5; /* Warm off-white/cream background */
+  --color-text-main: #2b2521; /* Rich warm coffee/charcoal text */
+  --color-text-muted: #736b63; /* Warm grey-brown for secondary text */
+  --color-primary: #ff6b4a; /* Warm coral orange */
+  --color-primary-hover: #e55331;
+  --color-secondary: #0d9488; /* Teal */
+  --color-secondary-hover: #0b7a70;
+  --color-accent: #f43f5e;
+  --color-success: #10b981;
+  --color-warning: #d97706;
+  
+  --font-title: 'Playfair Display', serif;
+  --font-body: 'Plus Jakarta Sans', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: var(--color-bg);
+  color: var(--color-text-main);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+/* Custom Scrollbar for Premium Feel */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-bg);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(43, 37, 33, 0.15) !important;
+  border-radius: 99px;
+  border: 2px solid var(--color-bg) !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(43, 37, 33, 0.3) !important;
+}
+
+/* --- LIGHT MODE PREMIUM OVERRIDES (Using !important to cleanly override scoped dark styles) --- */
+
+/* 1. Cards, panels, grids, items and boxes */
+.card, 
+.stat-card, 
+.step-card, 
+.testimonial-card, 
+.glass-card, 
+.item-card, 
+.spot-card, 
+.walk-card, 
+.form-card, 
+.list-card, 
+.panel-card, 
+.table-card, 
+.adoption-card,
+.info-card,
+.pet-card,
+.sponsorship-card,
+.trip-card,
+.reward-card,
+.log-card,
+.auth-card,
+.product-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(43, 37, 33, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(43, 37, 33, 0.03) !important;
+  color: var(--color-text-main) !important;
+}
+
+/* Ensure child elements in cards have correct muted colors */
+.card p, 
+.stat-card p, 
+.step-card p, 
+.testimonial-card p, 
+.glass-card p, 
+.item-card p,
+.panel-card p,
+.adoption-card p,
+.info-card p,
+.pet-card p,
+.sponsorship-card p,
+.product-card p {
+  color: var(--color-text-muted) !important;
+}
+
+/* Card hover effect */
+.card-interactive:hover,
+.card:hover,
+.item-card:hover,
+.pet-card:hover,
+.reward-card:hover,
+.product-card:hover {
+  transform: translateY(-4px) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 15px 35px rgba(255, 107, 74, 0.08) !important;
+}
+
+/* Title colors inside cards and pages */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--color-text-main) !important;
+}
+
+/* 2. Form fields, inputs & selects */
+input[type="text"],
+input[type="email"],
+input[type="number"],
+input[type="password"],
+input[type="tel"],
+input[type="date"],
+select,
+textarea,
+.form-input,
+.search-input,
+.input-field {
+  background-color: #ffffff !important;
+  border: 1px solid rgba(43, 37, 33, 0.15) !important;
+  color: var(--color-text-main) !important;
+  border-radius: 8px !important;
+  padding: 0.75rem 1rem !important;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 3px rgba(255, 107, 74, 0.15) !important;
+  outline: none !important;
+}
+
+/* Placeholder color */
+input::placeholder,
+textarea::placeholder {
+  color: var(--color-text-muted) !important;
+  opacity: 0.7 !important;
+}
+
+/* Select options formatting */
+select option {
+  background-color: #ffffff !important;
+  color: var(--color-text-main) !important;
+}
+
+/* Labels */
+label,
+.form-label {
+  color: var(--color-text-main) !important;
+  font-weight: 500 !important;
+}
+
+/* 3. Header & Navigation */
+.header,
+.topbar {
+  border-bottom: 1px solid rgba(43, 37, 33, 0.08) !important;
+  background-color: var(--color-bg) !important;
+}
+
+.footer {
+  border-top: 1px solid rgba(43, 37, 33, 0.08) !important;
+  background-color: var(--color-bg) !important;
+}
+
+/* Tabs Navigation */
+.tabs-nav {
+  border-bottom: 1px solid rgba(43, 37, 33, 0.08) !important;
+}
+
+/* 4. Tables */
+table,
+.table {
+  border-collapse: collapse !important;
+  width: 100% !important;
+}
+
+table th, 
+.table th {
+  background-color: rgba(43, 37, 33, 0.02) !important;
+  color: var(--color-text-main) !important;
+  border-bottom: 2px solid rgba(43, 37, 33, 0.08) !important;
+}
+
+table td, 
+.table td {
+  border-bottom: 1px solid rgba(43, 37, 33, 0.06) !important;
+  color: var(--color-text-main) !important;
+}
+
+/* 5. Buttons secondary/outline */
+.btn-secondary,
+.btn-outline,
+.btn-outline-primary,
+.nav-btn-secondary {
+  background: rgba(43, 37, 33, 0.04) !important;
+  border: 1px solid rgba(43, 37, 33, 0.08) !important;
+  color: var(--color-text-main) !important;
+}
+
+.btn-secondary:hover,
+.btn-outline:hover,
+.nav-btn-secondary:hover {
+  background: rgba(43, 37, 33, 0.08) !important;
+  border-color: rgba(43, 37, 33, 0.15) !important;
+  color: var(--color-text-main) !important;
+}
+
+/* 6. Background blobs (gradients) */
+.bg-gradient-circle,
+.bg-blob {
+  opacity: 0.12 !important; /* Low opacity in light mode for subtle, elegant look */
+}
+
+/* 7. Modal or dialog backdrops */
+.modal-overlay,
+.dialog-overlay {
+  background: rgba(43, 37, 33, 0.4) !important; /* Semi-transparent dark overlay for light mode focus */
+}
+
+.modal-content,
+.dialog-content {
+  background: #ffffff !important;
+  border: 1px solid rgba(43, 37, 33, 0.1) !important;
+  box-shadow: 0 20px 40px rgba(43, 37, 33, 0.1) !important;
+}
+
+/* 8. Alert / Notification banners */
+.alert-success,
+.banner-success,
+.flash-alert {
+  background: #ecfdf5 !important;
+  color: #065f46 !important;
+  border: 1px solid #a7f3d0 !important;
+}
+
+.alert-warning,
+.banner-warning {
+  background: #fffbeb !important;
+  color: #92400e !important;
+  border: 1px solid #fde68a !important;
+}
+
+.alert-error,
+.banner-error,
+.alert-danger,
+.error-alert {
+  background: #fef2f2 !important;
+  color: #991b1b !important;
+  border: 1px solid #fecaca !important;
+}
+
+/* 9. Badges & Roles */
+.badge,
+.badge-role {
+  background: rgba(255, 107, 74, 0.1) !important;
+  color: var(--color-primary) !important;
+  border: 1px solid rgba(255, 107, 74, 0.2) !important;
+}
+
+/* 10. Gradient texts */
+.gradient-text {
+  background: linear-gradient(135deg, #7c3aed 0%, #0284c7 100%) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+}
+
+/* 11. Dashboard specific overrides */
+.dashboard-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(43, 37, 33, 0.08) !important;
+  box-shadow: 0 20px 50px rgba(43, 37, 33, 0.06) !important;
+}
+
+.highlight-text {
+  color: #7c3aed !important; /* Deep warm purple */
+}
+
+.hub-item {
+  background: #ffffff !important;
+  border: 1px solid rgba(43, 37, 33, 0.08) !important;
+}
+
+.item-interactive:hover {
+  background: rgba(43, 37, 33, 0.01) !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 8px 24px rgba(43, 37, 33, 0.05) !important;
+}
+
+.hub-icon {
+  background: rgba(43, 37, 33, 0.03) !important;
+  border: 1px solid rgba(43, 37, 33, 0.05) !important;
+}
+
+.status-indicator {
+  background: rgba(43, 37, 33, 0.03) !important;
+  border: 1px solid rgba(43, 37, 33, 0.08) !important;
+}
+
+.abandon-map-container {
+  background: #f0ede9 !important;
+  border-color: rgba(43, 37, 33, 0.12) !important;
+  box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.05) !important;
+}
+
+.map-card,
+.sponsored-section {
+  border-color: rgba(43, 37, 33, 0.08) !important;
+}
+
+.sponsored-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(43, 37, 33, 0.08) !important;
+}
+
+.sponsored-emoji {
+  background: rgba(255, 107, 74, 0.08) !important;
+}
+
+/* 12. QrPass specific overrides */
+.pass-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(43, 37, 33, 0.08) !important;
+  box-shadow: 0 20px 50px rgba(43, 37, 33, 0.05) !important;
+}
+
+.pass-grid {
+  border-bottom: 1px solid rgba(43, 37, 33, 0.08) !important;
+}
+
+.avatar-emoji {
+  background: rgba(43, 37, 33, 0.02) !important;
+  border: 1px solid rgba(43, 37, 33, 0.08) !important;
+}
+
+.microchip-label {
+  background: rgba(255, 107, 74, 0.08) !important;
+  border: 1px solid rgba(255, 107, 74, 0.15) !important;
+  color: var(--color-primary) !important;
+}
+
+.qr-mock {
+  background: rgba(43, 37, 33, 0.02) !important;
+  border: 1px dashed rgba(43, 37, 33, 0.12) !important;
+}
+
+.emergency-trigger-box {
+  background: #fff1f2 !important; /* Soft rose background */
+  border: 1px solid #fecdd3 !important;
+}
+
+.med-card {
+  background: rgba(43, 37, 33, 0.01) !important;
+  border: 1px solid rgba(43, 37, 33, 0.05) !important;
+}
+
+.description-box {
+  border-top: 1px solid rgba(43, 37, 33, 0.08) !important;
+}
+
+/* 13. Sponsor specific overrides */
+.plan-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(43, 37, 33, 0.08) !important;
+}
+
+.plan-card:hover {
+  background: rgba(43, 37, 33, 0.02) !important;
+  border-color: rgba(43, 37, 33, 0.15) !important;
+}
+
+.plan-card.active {
+  background: rgba(255, 107, 74, 0.08) !important;
+  border-color: var(--color-primary) !important;
+}
+
+.plan-card.plan-silver.active {
+  background: rgba(13, 148, 136, 0.08) !important;
+  border-color: var(--color-secondary) !important;
+}
+
+.plan-card.plan-gold.active {
+  background: rgba(217, 119, 6, 0.08) !important;
+  border-color: var(--color-warning) !important;
+}
+
+.checkout-card {
+  background: #ffffff !important;
+  border: 1px solid rgba(43, 37, 33, 0.08) !important;
+  box-shadow: 0 10px 30px rgba(43, 37, 33, 0.03) !important;
+}
+
+.payment-box {
+  background: rgba(43, 37, 33, 0.01) !important;
+  border: 1px solid rgba(43, 37, 33, 0.05) !important;
+}
+
+.payment-header {
+  border-bottom: 1px solid rgba(43, 37, 33, 0.08) !important;
+}
+
+.total-row {
+  border-top: 1px solid rgba(43, 37, 33, 0.08) !important;
+}
+
+/* 14. Footer bottom line */
+.footer-bottom {
+  border-top: 1px solid rgba(43, 37, 33, 0.08) !important;
+}

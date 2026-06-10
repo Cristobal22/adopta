@@ -1,0 +1,24 @@
+{
+  "name": "Adopta - Ecosistema de Bienestar Animal",
+  "short_name": "Adopta",
+  "description": "Plataforma inteligente para la adopción y el seguimiento de bienestar animal en Chile.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#FAF8F5",
+  "theme_color": "#ff6b4a",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/images/pwa-icon.png",
+      "type": "image/png",
+      "sizes": "192x192",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/images/pwa-icon.png",
+      "type": "image/png",
+      "sizes": "512x512",
+      "purpose": "any maskable"
+    }
+  ]
+}
