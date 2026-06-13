@@ -1,29 +1,22 @@
 <template>
-  <div class="backoffice-container">
+  <div class="backoffice-container" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
     <div class="bg-gradient-circle blob-1"></div>
     <div class="bg-gradient-circle blob-2"></div>
 
-    <div class="dashboard-layout">
-      <!-- Main Content -->
-      <main class="main-content">
-        <!-- Top Bar -->
-        <header class="topbar">
-          <div class="logo">
-            <span class="logo-icon">🐾</span>
-            <span class="logo-text">Adopta<span class="logo-dot">.</span></span>
-            <span class="badge-role">Bóveda de Contratos</span>
-          </div>
-          <div class="topbar-actions">
-            <Link href="/backoffice/audit-logs" class="btn btn-secondary btn-sm" style="margin-right: 0.5rem;">Ver Auditoría</Link>
-            <Link href="/dashboard" class="btn btn-secondary btn-sm">Volver al Dashboard</Link>
-          </div>
-        </header>
+    <Header />
 
-        <!-- Section Header -->
-        <div class="section-header">
+    <!-- Main Content -->
+    <main class="main-content" style="width: 100%; max-width: 1200px; margin: 0 auto; flex-grow: 1; padding: 2rem; box-sizing: border-box; position: relative; z-index: 10;">
+      <!-- Section Header -->
+      <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
           <h1>Bóveda de Contratos de Adopción</h1>
           <p class="subtitle">Búsqueda avanzada, descarga de firmas certificadas y auditoría de cumplimiento de cláusulas de tenencia responsable.</p>
         </div>
+        <div>
+          <Link href="/backoffice/audit-logs" class="btn btn-secondary btn-sm">Ver Auditoría</Link>
+        </div>
+      </div>
 
         <!-- Alerts panel if clause alerts exist -->
         <div class="card alert-vault-card" v-if="clauseAlerts.length > 0">
@@ -120,19 +113,24 @@
             No se encontraron contratos de adopción en la bóveda que coincidan con la búsqueda.
           </div>
         </div>
-      </main>
-    </div>
+    </main>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 import { Link, router } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import Header from '../../Components/Header.vue'
+import Footer from '../../Components/Footer.vue'
 
 export default {
   name: 'Vault',
   components: {
     Link,
+    Header,
+    Footer,
   },
   props: {
     adoptions: Array,

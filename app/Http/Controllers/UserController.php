@@ -92,6 +92,11 @@ class UserController extends Controller
 
         \App\Services\AuditService::log('update_user_profile', $user, $oldValues, $newValues);
 
+        // Evaluar hitos individuales y globales
+        $milestoneService = new \App\Services\MilestoneService();
+        $milestoneService->checkUserMilestones($user);
+        $milestoneService->checkGlobalMilestones();
+
         return redirect()->route('dashboard')->with('success', 'Formulario de estilo de vida guardado correctamente.');
     }
 }

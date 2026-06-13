@@ -1,6 +1,14 @@
 import { createApp, h } from 'vue';
 import { createInertiaApp, router } from '@inertiajs/vue3';
 
+// Global PWA Install Prompt Listener
+window.deferredPrompt = null;
+window.addEventListener('beforeinstallprompt', (e) => {
+    e.preventDefault();
+    window.deferredPrompt = e;
+    window.dispatchEvent(new CustomEvent('pwa-install-ready'));
+});
+
 // Soporte para subdirectorios locales en Apache
 const baseDir = window.location.pathname.startsWith('/adopta/public') ? '/adopta/public' : '';
 

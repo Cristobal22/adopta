@@ -11,6 +11,12 @@ return Application::configure(basePath: dirname(__DIR__))
         commands: __DIR__.'/../routes/console.php',
         health: '/up',
     )
+    ->registered(function ($app) {
+        $publicPath = file_exists($app->basePath() . '/../public_html')
+            ? $app->basePath() . '/../public_html'
+            : $app->basePath() . '/public';
+        $app->usePublicPath($publicPath);
+    })
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->web(append: [
             \App\Http\Middleware\HandleInertiaRequests::class,

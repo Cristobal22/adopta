@@ -1,17 +1,9 @@
 <template>
-  <div class="sponsor-container">
+  <div class="sponsor-container" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
     <div class="bg-gradient-circle blob-1"></div>
     <div class="bg-gradient-circle blob-2"></div>
 
-    <header class="header">
-      <div class="logo">
-        <span class="logo-icon">🐾</span>
-        <span class="logo-text">Adopta<span class="logo-dot">.</span></span>
-      </div>
-      <div class="user-menu">
-        <Link href="/pets" class="btn btn-secondary btn-sm">Volver al Catálogo</Link>
-      </div>
-    </header>
+    <Header />
 
     <main class="main-content">
       <div class="section-header">
@@ -160,17 +152,23 @@
         </div>
       </div>
     </main>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 import { Link, useForm, usePage } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import Header from '../../Components/Header.vue'
+import Footer from '../../Components/Footer.vue'
 
 export default {
   name: 'Sponsor',
   components: {
     Link,
+    Header,
+    Footer,
   },
   props: {
     pet: Object,

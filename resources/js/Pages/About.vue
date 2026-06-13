@@ -9,10 +9,10 @@
     <main class="main-content">
       <!-- Hero Section -->
       <section class="about-hero">
-        <div class="badge">Nuestra Misión</div>
+        <div class="badge">Coquimbo & La Serena • Sin Fines de Lucro</div>
         <h1 class="title">Revolucionando el Bienestar Animal con <span class="gradient-text">Tecnología</span> y Amor</h1>
         <p class="subtitle">
-          Adopta es un ecosistema digital integral que conecta fundaciones, rescatistas independientes, voluntarios de transporte y adoptantes definitivos en una sola plataforma estructurada con el fin de asegurar adopciones responsables y duraderas.
+          Adopta es una plataforma colaborativa y 100% sin fines de lucro, enfocada de forma exclusiva en conectar y promover adopciones responsables en las comunas de **Coquimbo** y **La Serena** (esperando expandirnos a más comunas a futuro). Conectamos fundaciones, rescatistas, conductores voluntarios y familias en una red transparente y de libre acceso.
         </p>
       </section>
 

@@ -99,6 +99,11 @@ class DiaryController extends Controller
         // Incrementar puntos del adoptante por cumplir con su reporte (Gamificación)
         $user->increment('points', 20); // 20 puntos por cada diario enviado a tiempo
 
+        // Evaluar hitos individuales y globales
+        $milestoneService = new \App\Services\MilestoneService();
+        $milestoneService->checkUserMilestones($user);
+        $milestoneService->checkGlobalMilestones();
+
         return back()->with('success', '¡Gracias por reportar hoy! Tu diario ha sido enviado y sumaste 20 Huellas a tu cuenta.');
     }
 

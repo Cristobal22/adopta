@@ -42,6 +42,11 @@ class ModerationController extends Controller
         $adopter = $diary->adoption->adopter;
         $adopter->increment('points', 50);
 
+        // Evaluar hitos individuales y globales
+        $milestoneService = new \App\Services\MilestoneService();
+        $milestoneService->checkUserMilestones($adopter);
+        $milestoneService->checkGlobalMilestones();
+
         AuditService::log('approve_public_diary', $diary, $oldValues, $diary->getChanges());
 
         return back()->with('success', 'Bitácora aprobada para el perfil público. Se han otorgado 50 Huellas extra al adoptante.');

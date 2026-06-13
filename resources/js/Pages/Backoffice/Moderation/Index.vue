@@ -1,20 +1,12 @@
 <template>
-  <div class="backoffice-container">
+  <div class="backoffice-container" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
     <div class="bg-gradient-circle blob-1"></div>
     <div class="bg-gradient-circle blob-2"></div>
 
-    <div class="dashboard-layout">
-      <!-- Main Content -->
-      <main class="main-content">
-        <!-- Top Bar -->
-        <header class="topbar">
-          <div class="logo">
-            <span class="logo-icon">🐾</span>
-            <span class="logo-text">Adopta<span class="logo-dot">.</span></span>
-            <span class="badge-role">Backoffice Moderación</span>
-          </div>
-          <Link href="/dashboard" class="btn btn-secondary btn-sm">Volver al Dashboard</Link>
-        </header>
+    <Header />
+
+    <!-- Main Content -->
+    <main class="main-content" style="width: 100%; max-width: 1200px; margin: 0 auto; flex-grow: 1; padding: 2rem; box-sizing: border-box; position: relative; z-index: 10;">
 
         <!-- Flash Alert -->
         <div class="alert alert-success" v-if="flash.success">
@@ -72,19 +64,24 @@
           <h3>No hay bitácoras pendientes de moderación</h3>
           <p>Todos los reportes marcados como públicos han sido procesados. ¡Gran trabajo manteniendo al día la comunidad!</p>
         </div>
-      </main>
-    </div>
+    </main>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 import { Link, router, usePage } from '@inertiajs/vue3'
 import { ref, computed } from 'vue'
+import Header from '../../../Components/Header.vue'
+import Footer from '../../../Components/Footer.vue'
 
 export default {
   name: 'Index',
   components: {
     Link,
+    Header,
+    Footer,
   },
   props: {
     diaries: Array,

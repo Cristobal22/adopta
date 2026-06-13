@@ -1,28 +1,22 @@
 <template>
-  <div class="backoffice-container">
+  <div class="backoffice-container" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
     <div class="bg-gradient-circle blob-1"></div>
     <div class="bg-gradient-circle blob-2"></div>
 
-    <div class="dashboard-layout">
-      <!-- Main Content -->
-      <main class="main-content">
-        <!-- Top Bar -->
-        <header class="topbar">
-          <div class="logo">
-            <span class="logo-icon">🏛️</span>
-            <span class="logo-text">Adopta<span class="logo-dot">.</span></span>
-            <span class="badge-role">Auditoría de Maltrato</span>
-          </div>
-          <Link href="/municipality/dashboard" class="btn btn-secondary btn-sm">
-            Volver al Dashboard
-          </Link>
-        </header>
+    <Header />
 
-        <!-- Section Header -->
-        <div class="section-header">
+    <!-- Main Content -->
+    <main class="main-content" style="width: 100%; max-width: 1200px; margin: 0 auto; flex-grow: 1; padding: 2rem; box-sizing: border-box; position: relative; z-index: 10;">
+      <!-- Section Header -->
+      <div class="section-header" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 1rem;">
+        <div>
           <h1>Fiscalización de Alertas de Maltrato</h1>
           <p class="subtitle">Inspección de reportes de diario alertados automáticamente por la IA en la comuna de <strong>{{ communeName }}</strong>.</p>
         </div>
+        <div>
+          <Link href="/municipality/dashboard" class="btn btn-secondary btn-sm">Volver al Dashboard</Link>
+        </div>
+      </div>
 
         <!-- Alerts list -->
         <div class="alerts-container">
@@ -87,19 +81,24 @@
             <p>El algoritmo etológico y de visión no ha detectado sospechas de maltrato o adaptación crítica en los diarios recientes de tu comuna.</p>
           </div>
         </div>
-      </main>
-    </div>
+    </main>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 import { Link } from '@inertiajs/vue3'
 import { computed } from 'vue'
+import Header from '../../Components/Header.vue'
+import Footer from '../../Components/Footer.vue'
 
 export default {
   name: 'AuditAbuse',
   components: {
     Link,
+    Header,
+    Footer,
   },
   props: {
     commune: String,

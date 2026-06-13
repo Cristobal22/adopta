@@ -415,3 +415,38 @@ table td,
 .footer-bottom {
   border-top: 1px solid rgba(43, 37, 33, 0.08) !important;
 }
+
+/* 15. Global Responsiveness Overrides */
+@media (max-width: 576px) {
+  /* Hide badge-role in topbar on mobile to prevent squishing */
+  .topbar .badge-role {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Make tabs-nav horizontally scrollable on mobile/tablet */
+  .tabs-nav {
+    display: flex !important;
+    gap: 1rem !important;
+    overflow-x: auto !important;
+    -webkit-overflow-scrolling: touch !important;
+    white-space: nowrap !important;
+    padding-bottom: 1.25rem !important;
+  }
+
+  /* Hide scrollbars for tabs-nav while keeping scroll functionality */
+  .tabs-nav::-webkit-scrollbar {
+    display: none !important;
+  }
+
+  .tabs-nav {
+    -ms-overflow-style: none !important;
+    scrollbar-width: none !important;
+  }
+
+  .tab-btn {
+    flex-shrink: 0 !important;
+    white-space: nowrap !important;
+  }
+}

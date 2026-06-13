@@ -1,21 +1,9 @@
 <template>
-  <div class="public-story-container">
+  <div class="public-story-container" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
     <div class="bg-gradient-circle blob-1"></div>
     <div class="bg-gradient-circle blob-2"></div>
 
-    <!-- Header Navigation -->
-    <header class="public-header">
-      <div class="logo-wrapper">
-        <Link href="/" class="logo-link">
-          <span class="logo-icon">🐾</span>
-          <span class="logo-text">Adopta<span class="logo-dot">.</span></span>
-        </Link>
-      </div>
-      <div class="nav-links">
-        <Link href="/pets" class="nav-btn">Ver Catálogo</Link>
-        <Link href="/register" class="btn btn-primary btn-sm">Quiero Adoptar</Link>
-      </div>
-    </header>
+    <Header />
 
     <main class="main-content">
       <!-- Success Story Profile Header Card -->
@@ -66,6 +54,26 @@
         </div>
       </section>
 
+      <!-- Share Pet Story Card -->
+      <section class="share-card card">
+        <h4>📢 Comparte la historia de {{ pet.name }} en redes sociales</h4>
+        <p class="share-desc">Ayúdanos a difundir este caso de éxito para inspirar a más familias a adoptar y apadrinar de forma responsable.</p>
+        <div class="share-buttons-row">
+          <button @click="shareSocial('whatsapp')" class="btn btn-share-social whatsapp-btn">
+            🟢 WhatsApp
+          </button>
+          <button @click="shareSocial('facebook')" class="btn btn-share-social facebook-btn">
+            🔵 Facebook
+          </button>
+          <button @click="shareSocial('twitter')" class="btn btn-share-social twitter-btn">
+            ⚫ Twitter / X
+          </button>
+          <button @click="shareSocial('native')" class="btn btn-share-social native-btn">
+            🔗 Compartir Enlace
+          </button>
+        </div>
+      </section>
+
       <!-- Success Timeline / Gallery -->
       <section class="timeline-section">
         <h2 class="timeline-title">📈 Bitácoras de Evolución</h2>
@@ -111,21 +119,22 @@
       </section>
     </main>
 
-    <!-- Footer -->
-    <footer class="public-footer">
-      <p>&copy; 2026 Adopta. Plataforma de Tenencia Responsable y Adopciones.</p>
-    </footer>
+    <Footer />
   </div>
 </template>
 
 <script>
 import { Link } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import Header from '../../Components/Header.vue'
+import Footer from '../../Components/Footer.vue'
 
 export default {
   name: 'PublicStory',
   components: {
     Link,
+    Header,
+    Footer,
   },
   props: {
     pet: Object,
@@ -173,11 +182,41 @@ export default {
       return map[emoji] || 'Adaptándose'
     }
 
+    const shareSocial = (platform) => {
+      const base = window.location.origin + (window.location.pathname.startsWith('/adopta/public') ? '/adopta/public' : '')
+      const shareUrl = `${base}/pets/${props.pet.id}/story`
+      const shareTitle = `La Nueva Vida de ${props.pet.name} 💖`
+      const shareText = `¡Mira cómo le va a ${props.pet.name} en su nuevo hogar! Un caso de éxito de adopción responsable.`
+
+      if (platform === 'whatsapp') {
+        window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(shareText + ' ' + shareUrl)}`, '_blank')
+      } else if (platform === 'facebook') {
+        window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}`, '_blank')
+      } else if (platform === 'twitter') {
+        window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`, '_blank')
+      } else if (platform === 'native') {
+        if (navigator.share) {
+          navigator.share({
+            title: shareTitle,
+            text: shareText,
+            url: shareUrl,
+          }).catch(console.error)
+        } else {
+          navigator.clipboard.writeText(shareUrl).then(() => {
+            alert('¡Enlace de la historia copiado al portapapeles!')
+          }).catch(err => {
+            console.error('Error al copiar el enlace:', err)
+          })
+        }
+      }
+    }
+
     return {
       reactions,
       incrementReaction,
       formatDate,
       getMoodLabel,
+      shareSocial,
     }
   }
 }
@@ -192,6 +231,102 @@ export default {
   overflow: hidden;
   display: flex;
   flex-direction: column;
+}
+
+/* Share Story Card Styles */
+.share-card {
+  margin-top: 1.5rem;
+  padding: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.share-desc {
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+  margin: 0;
+}
+
+.share-buttons-row {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 576px) {
+  .share-buttons-row {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+}
+
+.btn-share-social {
+  flex: 1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  padding: 0.75rem 1.25rem;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-decoration: none;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+@media (max-width: 576px) {
+  .btn-share-social {
+    width: 100%;
+  }
+}
+
+.whatsapp-btn {
+  background: rgba(37, 211, 102, 0.1);
+  color: #25d366 !important;
+  border-color: rgba(37, 211, 102, 0.25);
+}
+
+.whatsapp-btn:hover {
+  background: rgba(37, 211, 102, 0.2);
+  transform: translateY(-2px);
+}
+
+.facebook-btn {
+  background: rgba(24, 119, 242, 0.1);
+  color: #1877f2 !important;
+  border-color: rgba(24, 119, 242, 0.25);
+}
+
+.facebook-btn:hover {
+  background: rgba(24, 119, 242, 0.2);
+  transform: translateY(-2px);
+}
+
+.twitter-btn {
+  background: rgba(255, 255, 255, 0.03);
+  color: var(--color-text-main) !important;
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+.twitter-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  transform: translateY(-2px);
+}
+
+.native-btn {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: white !important;
+  border: none;
+  box-shadow: 0 4px 12px rgba(255, 107, 74, 0.2);
+}
+
+.native-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(255, 107, 74, 0.3);
 }
 
 /* Background Blobs */

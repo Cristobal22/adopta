@@ -74,6 +74,10 @@ class AuthController extends Controller
 
         Auth::login($user);
 
+        // Evaluar hitos globales de la comunidad
+        $milestoneService = new \App\Services\MilestoneService();
+        $milestoneService->checkGlobalMilestones();
+
         return redirect('/');
     }
 

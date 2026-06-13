@@ -1,22 +1,12 @@
 <template>
-  <div class="backoffice-container">
+  <div class="backoffice-container" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
     <div class="bg-gradient-circle blob-1"></div>
     <div class="bg-gradient-circle blob-2"></div>
 
-    <div class="dashboard-layout">
-      <!-- Main Content -->
-      <main class="main-content">
-        <!-- Top Bar -->
-        <header class="topbar">
-          <div class="logo">
-            <span class="logo-icon">🐾</span>
-            <span class="logo-text">Adopta<span class="logo-dot">.</span></span>
-            <span class="badge-role">Logística</span>
-          </div>
-          <div class="user-menu">
-            <Link href="/dashboard" class="btn btn-secondary btn-sm">Volver al Dashboard</Link>
-          </div>
-        </header>
+    <Header />
+
+    <!-- Main Content -->
+    <main class="main-content" style="width: 100%; max-width: 1200px; margin: 0 auto; flex-grow: 1; padding: 2rem; box-sizing: border-box; position: relative; z-index: 10;">
 
         <!-- Section Header -->
         <div class="section-header">
@@ -36,6 +26,35 @@
 
         <!-- TAB 1: UBER SOLIDARIO -->
         <div v-show="currentTab === 'uber'" class="logistics-grid">
+          <!-- Full Width Summary Widget for Volunteers -->
+          <div class="card volunteer-dashboard-widget grid-full-card">
+            <h3>📊 Resumen de Oportunidades de Ayuda Activa</h3>
+            <p class="card-desc">Eres parte vital del ecosistema de ayuda. Revisa las necesidades de traslado en tu zona.</p>
+            <div class="vol-stats-grid">
+              <div class="vol-stat-item">
+                <span class="vol-stat-icon">🚗</span>
+                <div class="vol-stat-info">
+                  <span class="vol-stat-num">{{ availableTrips.length }}</span>
+                  <span class="vol-stat-label">Traslados esperando chofer</span>
+                </div>
+              </div>
+              <div class="vol-stat-item">
+                <span class="vol-stat-icon">📦</span>
+                <div class="vol-stat-info">
+                  <span class="vol-stat-num">{{ resources.filter(r => r.status === 'disponible').length }}</span>
+                  <span class="vol-stat-label">Insumos/Donaciones en banco</span>
+                </div>
+              </div>
+              <div class="vol-stat-item">
+                <span class="vol-stat-icon">🏆</span>
+                <div class="vol-stat-info">
+                  <span class="vol-stat-num">+50 Pts</span>
+                  <span class="vol-stat-label">Por traslado completado</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <!-- Left Column: Available & Active Trips -->
           <div class="logistics-column">
             <!-- Active/My Trips -->
@@ -81,15 +100,41 @@
 
               <div class="trip-list" v-if="availableTrips.length > 0">
                 <div class="trip-card trip-available-card" v-for="trip in availableTrips" :key="trip.id">
+                  <div class="trip-card-badge-row">
+                    <span class="urgency-badge badge-urgent">⚠️ Traslado Pendiente</span>
+                    <span class="trip-id-tag">VIAJE #{{ trip.id }}</span>
+                  </div>
+                  
                   <div class="trip-body">
-                    <div class="trip-location">📍 <strong>Origen:</strong> {{ trip.origin }}</div>
-                    <div class="trip-location">🏁 <strong>Destino:</strong> {{ trip.destination }}</div>
-                    <div class="trip-pet" v-if="trip.pet">🐶 <strong>Mascota:</strong> {{ trip.pet.name }} ({{ trip.pet.species }})</div>
+                    <div class="trip-route-visual">
+                      <div class="route-point">
+                        <span class="route-dot origin-dot">📍</span>
+                        <div class="route-details">
+                          <span class="route-label">Punto de Retiro:</span>
+                          <span class="route-address">{{ trip.origin }}</span>
+                        </div>
+                      </div>
+                      <div class="route-connector"></div>
+                      <div class="route-point">
+                        <span class="route-dot dest-dot">🏁</span>
+                        <div class="route-details">
+                          <span class="route-label">Destino de Entrega:</span>
+                          <span class="route-address">{{ trip.destination }}</span>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="trip-pet-info" v-if="trip.pet">
+                      <span class="pet-emoji">🐾</span>
+                      <div class="pet-detail-text">
+                        <strong>Mascota:</strong> {{ trip.pet.name }} <span class="pet-spec text-capitalize">({{ trip.pet.species }} • {{ trip.pet.breed || 'Mestizo' }})</span>
+                      </div>
+                    </div>
                   </div>
 
                   <div class="trip-footer-row">
                     <span class="requester-name">👤 Por: {{ trip.requester.name }}</span>
-                    <button class="btn btn-secondary btn-sm" @click="acceptTrip(trip)">
+                    <button class="btn btn-primary btn-sm accept-btn-premium" @click="acceptTrip(trip)">
                       🚗 Aceptar Traslado
                     </button>
                   </div>
@@ -165,19 +210,24 @@
             </div>
           </div>
         </div>
-      </main>
-    </div>
+    </main>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 import { Link, useForm, router, usePage } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import Header from '../../Components/Header.vue'
+import Footer from '../../Components/Footer.vue'
 
 export default {
   name: 'Hub',
   components: {
     Link,
+    Header,
+    Footer,
   },
   props: {
     availableTrips: Array,
@@ -307,46 +357,7 @@ export default {
   box-sizing: border-box;
 }
 
-/* Topbar */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0 2rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  margin-bottom: 2rem;
-}
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.logo-icon {
-  font-size: 1.5rem;
-}
-
-.logo-text {
-  font-family: var(--font-title);
-  font-weight: 800;
-  font-size: 1.25rem;
-}
-
-.logo-dot {
-  color: var(--color-primary);
-}
-
-.badge-role {
-  background: rgba(14, 165, 233, 0.15);
-  border: 1px solid rgba(14, 165, 233, 0.3);
-  color: var(--color-secondary);
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.2rem 0.6rem;
-  border-radius: 6px;
-  margin-left: 0.5rem;
-}
 
 /* Section Header */
 .section-header {
@@ -714,5 +725,193 @@ export default {
   font-size: 0.8rem;
   padding: 0.4rem 1rem;
   border-radius: 8px;
+}
+
+/* Volunteer Dashboard Summary Widget */
+.volunteer-dashboard-widget {
+  background: linear-gradient(135deg, rgba(255, 107, 74, 0.05) 0%, rgba(139, 92, 246, 0.05) 100%);
+  border: 1px solid rgba(255, 107, 74, 0.15) !important;
+}
+
+.vol-stats-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-top: 1.25rem;
+}
+
+@media (max-width: 768px) {
+  .vol-stats-grid {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+}
+
+.vol-stat-item {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.vol-stat-icon {
+  font-size: 1.75rem;
+  background: rgba(255, 255, 255, 0.04);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  flex-shrink: 0;
+}
+
+.vol-stat-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.vol-stat-num {
+  font-family: var(--font-title);
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--color-primary);
+}
+
+.vol-stat-label {
+  font-size: 0.75rem;
+  color: var(--color-text-muted);
+  font-weight: 500;
+}
+
+/* Trip Available Card Premium Styles */
+.trip-available-card {
+  border: 1px solid rgba(255, 107, 74, 0.1) !important;
+  background: rgba(255, 255, 255, 0.02) !important;
+}
+
+.trip-card-badge-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.urgency-badge {
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 0.25rem 0.6rem;
+  border-radius: 99px;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+
+.badge-urgent {
+  background: rgba(245, 158, 11, 0.15);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  color: #f59e0b;
+}
+
+.trip-id-tag {
+  font-size: 0.7rem;
+  font-weight: 600;
+  color: var(--color-text-muted);
+}
+
+.trip-route-visual {
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  padding-left: 0.5rem;
+}
+
+.route-point {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.75rem;
+}
+
+.route-dot {
+  font-size: 0.95rem;
+  z-index: 2;
+}
+
+.route-connector {
+  position: absolute;
+  left: 14px;
+  top: 18px;
+  bottom: 14px;
+  width: 2px;
+  border-left: 2px dashed rgba(255, 255, 255, 0.1);
+  z-index: 1;
+}
+
+.route-details {
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.route-label {
+  font-size: 0.65rem;
+  color: var(--color-text-muted);
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+}
+
+.route-address {
+  font-size: 0.85rem;
+  color: var(--color-text-main);
+  font-weight: 500;
+}
+
+.trip-pet-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+}
+
+.pet-emoji {
+  font-size: 1.1rem;
+}
+
+.pet-detail-text {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+}
+
+.pet-detail-text strong {
+  color: var(--color-text-main);
+}
+
+.pet-spec {
+  font-size: 0.75rem;
+}
+
+.accept-btn-premium {
+  background: linear-gradient(135deg, var(--color-primary) 0%, #a855f7 100%);
+  color: white !important;
+  box-shadow: 0 4px 10px rgba(255, 107, 74, 0.2);
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.accept-btn-premium:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 14px rgba(255, 107, 74, 0.3);
 }
 </style>

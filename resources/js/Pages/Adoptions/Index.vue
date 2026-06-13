@@ -1,21 +1,11 @@
 <template>
-  <div class="backoffice-container">
+  <div class="backoffice-container" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
     <div class="bg-gradient-circle blob-1"></div>
 
-    <div class="dashboard-layout">
-      <!-- Main Content -->
-      <main class="main-content">
-        <!-- Top Bar -->
-        <header class="topbar">
-          <div class="logo">
-            <span class="logo-icon">🐾</span>
-            <span class="logo-text">Adopta<span class="logo-dot">.</span></span>
-            <span class="badge-role">Adopciones</span>
-          </div>
-          <div class="user-menu">
-            <Link href="/dashboard" class="btn btn-secondary btn-sm">Volver al Dashboard</Link>
-          </div>
-        </header>
+    <Header />
+
+    <!-- Main Content -->
+    <main class="main-content" style="width: 100%; max-width: 1200px; margin: 0 auto; flex-grow: 1; padding: 2rem; box-sizing: border-box; position: relative; z-index: 10;">
 
         <!-- Section Header -->
         <div class="section-header">
@@ -91,18 +81,23 @@
             </div>
           </div>
         </div>
-      </main>
-    </div>
+    </main>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 import { Link } from '@inertiajs/vue3'
+import Header from '../../Components/Header.vue'
+import Footer from '../../Components/Footer.vue'
 
 export default {
   name: 'Index',
   components: {
     Link,
+    Header,
+    Footer,
   },
   props: {
     adoptions: Array,
@@ -178,52 +173,7 @@ export default {
   box-sizing: border-box;
 }
 
-/* Topbar */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0 2rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  margin-bottom: 2rem;
-}
 
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.logo-icon {
-  font-size: 1.5rem;
-}
-
-.logo-text {
-  font-family: var(--font-title);
-  font-weight: 800;
-  font-size: 1.25rem;
-}
-
-.logo-dot {
-  color: var(--color-primary);
-}
-
-.badge-role {
-  background: rgba(139, 92, 246, 0.15);
-  border: 1px solid rgba(139, 92, 246, 0.3);
-  color: #c084fc;
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.2rem 0.6rem;
-  border-radius: 6px;
-  margin-left: 0.5rem;
-}
-
-.user-menu {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
 
 /* Section Header */
 .section-header {
@@ -251,7 +201,8 @@ export default {
   background: rgba(255, 255, 255, 0.01);
   border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 20px;
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   margin-bottom: 2rem;
 }
 
@@ -260,6 +211,12 @@ export default {
   border-collapse: collapse;
   text-align: left;
   font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .data-table {
+    min-width: 650px;
+  }
 }
 
 .data-table th, .data-table td {

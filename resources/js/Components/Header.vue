@@ -19,6 +19,7 @@
       <Link href="/nosotros" class="nav-link" :class="{ active: isActive('/nosotros') }" @click="isMenuOpen = false">Nosotros</Link>
       <template v-if="user">
         <Link href="/dashboard" class="btn btn-secondary btn-sm" @click="isMenuOpen = false">Dashboard</Link>
+        <button @click="logout" class="btn btn-outline btn-sm logout-btn" style="margin-left: 0.5rem;">Cerrar Sesión</button>
       </template>
       <template v-else>
         <Link href="/login" class="btn btn-secondary btn-sm" @click="isMenuOpen = false">Ingresar</Link>
@@ -28,12 +29,16 @@
 </template>
 
 <script setup>
-import { Link, usePage } from '@inertiajs/vue3'
+import { Link, usePage, router } from '@inertiajs/vue3'
 import { computed, ref } from 'vue'
 
 const page = usePage()
 const user = computed(() => page.props.auth.user)
 const isMenuOpen = ref(false)
+
+const logout = () => {
+  router.post('/logout')
+}
 
 const isActive = (path) => {
   if (path === '/') {
@@ -217,5 +222,16 @@ const isActive = (path) => {
     padding: 0.75rem 1.5rem;
     font-size: 0.95rem;
   }
+}
+
+.logout-btn {
+  background: rgba(239, 68, 68, 0.08) !important;
+  color: #f87171 !important;
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
+}
+
+.logout-btn:hover {
+  background: rgba(239, 68, 68, 0.16) !important;
+  border-color: rgba(239, 68, 68, 0.35) !important;
 }
 </style>

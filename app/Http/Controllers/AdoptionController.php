@@ -8,6 +8,7 @@ use App\Models\User;
 use App\Services\AdoptionService;
 use App\Services\AuditService;
 use App\Services\MicrochipService;
+use App\Services\ContractService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -19,11 +20,16 @@ class AdoptionController extends Controller
 {
     protected AdoptionService $adoptionService;
     protected MicrochipService $microchipService;
+    protected ContractService $contractService;
 
-    public function __construct(AdoptionService $adoptionService, MicrochipService $microchipService)
-    {
+    public function __construct(
+        AdoptionService $adoptionService, 
+        MicrochipService $microchipService,
+        ContractService $contractService
+    ) {
         $this->adoptionService = $adoptionService;
         $this->microchipService = $microchipService;
+        $this->contractService = $contractService;
     }
 
     /**
@@ -190,24 +196,9 @@ class AdoptionController extends Controller
 
         $oldValues = $adoption->toArray();
 
-        // Guardar la firma en un archivo de storage privado
-        $signatureData = $request->signature_data;
-        $signatureImage = base64_decode(preg_replace('#^data:image/\w+;base64,#i', '', $signatureData));
-        
-        $signaturePath = 'signatures/signature_' . $adoption->id . '_' . time() . '.png';
-        Storage::disk('local')->put('private/' . $signaturePath, $signatureImage);
-
-        // Crear el contrato formal firmado (HTML Legal Certificado con metadatos de IP e Imagen)
-        $adoption->load(['pet', 'adopter', 'rescuer']);
-        $contractHtml = view('contracts.signed', [
-            'adoption' => $adoption,
-            'signature_path' => storage_path('app/private/' . $signaturePath),
-            'ip_address' => $request->ip(),
-            'signed_at' => now()->toDateTimeString(),
-        ])->render();
-
-        $contractPath = 'contracts/contract_' . $adoption->id . '_' . time() . '.html';
-        Storage::disk('local')->put('private/' . $contractPath, $contractHtml);
+        // Guardar firma y generar contrato a través de ContractService
+        $signaturePath = $this->contractService->saveSignatureImage($request->signature_data, $adoption->id);
+        $contractPath = $this->contractService->generateSignedContract($adoption, $signaturePath, $request->ip());
 
         // Actualizar adopción
         $adoption->update([
@@ -243,12 +234,8 @@ class AdoptionController extends Controller
 
         $oldValues = $adoption->toArray();
 
-        $file = $request->file('contract_file');
-        $contractPath = $file->storeAs(
-            'private/contracts',
-            'uploaded_contract_' . $adoption->id . '_' . time() . '.' . $file->getClientOriginalExtension(),
-            'local'
-        );
+        // Almacenar el contrato subido a través de ContractService
+        $contractPath = $this->contractService->saveUploadedContract($request->file('contract_file'), $adoption->id);
 
         // Actualizar adopción
         $adoption->update([

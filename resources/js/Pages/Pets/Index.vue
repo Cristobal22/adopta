@@ -1,28 +1,11 @@
 <template>
-  <div class="backoffice-container">
+  <div class="backoffice-container" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
     <div class="bg-gradient-circle blob-1"></div>
 
-    <div class="dashboard-layout">
-      <!-- Main Content -->
-      <main class="main-content">
-        <!-- Top Bar -->
-        <header class="topbar">
-          <div class="logo">
-            <span class="logo-icon">🐾</span>
-            <span class="logo-text">Adopta<span class="logo-dot">.</span></span>
-            <span class="badge-role">{{ !user ? 'Catálogo Público' : (['adoptante', 'transito', 'donante'].includes(user.role) ? 'Catálogo' : 'Backoffice') }}</span>
-          </div>
-          <div class="user-menu">
-            <template v-if="user">
-              <span class="username" v-if="['admin', 'fundacion', 'rescatista'].includes(user.role)">Panel de Gestión</span>
-              <span class="username" v-else>¡Hola, {{ user.name }}!</span>
-              <Link href="/dashboard" class="btn btn-secondary btn-sm">Volver al Dashboard</Link>
-            </template>
-            <template v-else>
-              <Link href="/login" class="btn btn-secondary btn-sm">Ingresar</Link>
-            </template>
-          </div>
-        </header>
+    <Header />
+
+    <!-- Main Content -->
+    <main class="main-content" style="width: 100%; max-width: 1200px; margin: 0 auto; flex-grow: 1; padding: 2rem; box-sizing: border-box; position: relative; z-index: 10;">
 
         <!-- Flash Messages -->
         <div class="flash-alert success-alert" v-if="$page.props.flash.success">
@@ -159,6 +142,9 @@
                     <Link :href="'/pets/' + pet.id + '/qr-pass'" class="btn btn-secondary btn-sm" title="Ver QR Pass">
                       🎫 Qr Pass
                     </Link>
+                    <button class="btn btn-secondary btn-sm" @click="sharePet(pet)" title="Compartir">
+                      🔗 Compartir
+                    </button>
                   </div>
                   <div class="action-buttons" v-else>
                     <button 
@@ -178,6 +164,9 @@
                     <Link :href="'/pets/' + pet.id + '/qr-pass'" class="btn btn-secondary btn-sm" v-if="pet.status === 'adoptado'">
                       🎫 Qr Pass
                     </Link>
+                    <button class="btn btn-secondary btn-sm" @click="sharePet(pet)" title="Compartir">
+                      🔗 Compartir
+                    </button>
                   </div>
                 </td>
               </tr>
@@ -202,19 +191,24 @@
             v-html="link.label"
           />
         </div>
-      </main>
-    </div>
+    </main>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 import { Link, router, usePage } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import Header from '../../Components/Header.vue'
+import Footer from '../../Components/Footer.vue'
 
 export default {
   name: 'Index',
   components: {
     Link,
+    Header,
+    Footer,
   },
   props: {
     pets: Object,
@@ -268,6 +262,27 @@ export default {
       return map[statusVal] || statusVal
     }
 
+    const sharePet = (pet) => {
+      const base = window.location.origin + (window.location.pathname.startsWith('/adopta/public') ? '/adopta/public' : '')
+      const shareUrl = `${base}/pets/${pet.id}/story`
+      const shareTitle = `Conoce a ${pet.name} en Adopta`
+      const shareText = `¡Mira el caso de ${pet.name}! Únete al ecosistema solidario de bienestar animal.`
+
+      if (navigator.share) {
+        navigator.share({
+          title: shareTitle,
+          text: shareText,
+          url: shareUrl,
+        }).catch(console.error)
+      } else {
+        navigator.clipboard.writeText(shareUrl).then(() => {
+          alert('¡Enlace de la historia copiado al portapapeles!')
+        }).catch(err => {
+          console.error('Error al copiar el enlace:', err)
+        })
+      }
+    }
+
     return {
       user,
       search,
@@ -278,6 +293,7 @@ export default {
       deletePet,
       postular,
       formatStatus,
+      sharePet,
     }
   }
 }
@@ -356,58 +372,6 @@ export default {
   box-sizing: border-box;
 }
 
-/* Topbar */
-.topbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 0 2rem 0;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  margin-bottom: 2rem;
-}
-
-.logo {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.logo-icon {
-  font-size: 1.5rem;
-}
-
-.logo-text {
-  font-family: var(--font-title);
-  font-weight: 800;
-  font-size: 1.25rem;
-}
-
-.logo-dot {
-  color: var(--color-primary);
-}
-
-.badge-role {
-  background: rgba(13, 165, 233, 0.15);
-  border: 1px solid rgba(13, 165, 233, 0.3);
-  color: var(--color-secondary);
-  font-size: 0.75rem;
-  font-weight: 700;
-  padding: 0.2rem 0.6rem;
-  border-radius: 6px;
-  margin-left: 0.5rem;
-}
-
-.user-menu {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.username {
-  font-size: 0.9rem;
-  color: var(--color-text-muted);
-  font-weight: 500;
-}
 
 /* Section Header */
 .section-header {
@@ -511,7 +475,8 @@ export default {
   background: rgba(255, 255, 255, 0.01);
   border: 1px solid rgba(255, 255, 255, 0.04);
   border-radius: 20px;
-  overflow: hidden;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   margin-bottom: 2rem;
 }
 
@@ -520,6 +485,12 @@ export default {
   border-collapse: collapse;
   text-align: left;
   font-size: 0.9rem;
+}
+
+@media (max-width: 768px) {
+  .data-table {
+    min-width: 650px;
+  }
 }
 
 .data-table th, .data-table td {

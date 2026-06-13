@@ -96,6 +96,10 @@ class PetController extends Controller
         // Registro en Bitácora de Auditoría
         AuditService::log('create_pet', $pet, null, $pet->toArray());
 
+        // Evaluar hitos globales (primeros pasos)
+        $milestoneService = new \App\Services\MilestoneService();
+        $milestoneService->checkGlobalMilestones();
+
         return redirect()->route('pets.index')->with('success', 'Mascota registrada exitosamente.');
     }
 

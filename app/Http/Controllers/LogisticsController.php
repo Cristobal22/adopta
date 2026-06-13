@@ -129,6 +129,11 @@ class LogisticsController extends Controller
         $driver = $trip->driver;
         if ($driver) {
             $driver->increment('points', 50); // 50 puntos por traslado voluntario
+
+            // Evaluar hitos individuales y globales
+            $milestoneService = new \App\Services\MilestoneService();
+            $milestoneService->checkUserMilestones($driver);
+            $milestoneService->checkGlobalMilestones();
         }
 
         AuditService::log('complete_uber_trip', $trip, $oldValues, $trip->getChanges());

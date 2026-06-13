@@ -1,20 +1,12 @@
 <template>
-  <div class="backoffice-container">
+  <div class="backoffice-container" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
     <div class="bg-gradient-circle blob-1"></div>
     <div class="bg-gradient-circle blob-2"></div>
 
-    <div class="dashboard-layout">
-      <!-- Main Content -->
-      <main class="main-content">
-        <!-- Top Bar -->
-        <header class="topbar">
-          <div class="logo">
-            <span class="logo-icon">🐾</span>
-            <span class="logo-text">Adopta<span class="logo-dot">.</span></span>
-            <span class="badge-role">Comunidad</span>
-          </div>
-          <Link href="/dashboard" class="btn btn-secondary btn-sm">Volver al Dashboard</Link>
-        </header>
+    <Header />
+
+    <!-- Main Content -->
+    <main class="main-content" style="width: 100%; max-width: 1200px; margin: 0 auto; flex-grow: 1; padding: 2rem; box-sizing: border-box; position: relative; z-index: 10;">
 
         <!-- Section Header -->
         <div class="section-header">
@@ -202,19 +194,24 @@
             </div>
           </div>
         </div>
-      </main>
-    </div>
+    </main>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 import { Link, useForm, usePage } from '@inertiajs/vue3'
 import { ref, onMounted, computed } from 'vue'
+import Header from '../../Components/Header.vue'
+import Footer from '../../Components/Footer.vue'
 
 export default {
   name: 'Radar',
   components: {
     Link,
+    Header,
+    Footer,
   },
   props: {
     spots: Array,

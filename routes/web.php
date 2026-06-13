@@ -20,8 +20,17 @@ use App\Http\Controllers\PublicStoryController;
 Route::get('/', function () {
     $featuredPets = \App\Models\Pet::whereIn('name', ['Kira', 'Milo', 'Thor'])
         ->get(['id', 'name', 'species', 'breed', 'age_text', 'photo_path', 'status']);
+
+    $stats = [
+        'pets_count' => \App\Models\Pet::count(),
+        'trips_count' => \App\Models\UberTrip::where('status', 'completado')->count(),
+        'entrepreneurs_count' => 3, // Representa la cantidad de Pymes registradas en el Bazar hardcodeado
+        'users_count' => \App\Models\User::count(),
+    ];
+
     return Inertia::render('Welcome', [
-        'featuredPets' => $featuredPets
+        'featuredPets' => $featuredPets,
+        'launchStats' => $stats
     ]);
 });
 
@@ -73,10 +82,17 @@ Route::middleware('auth')->group(function () {
             })->get(['id', 'name', 'species', 'status', 'photo_path']);
         }
 
+        $user->load('badges');
+        $milestoneService = new \App\Services\MilestoneService();
+        $milestoneService->initializeMilestones();
+        $globalMilestones = \App\Models\SystemMilestone::get();
+
         return Inertia::render('Dashboard', [
             'user' => $user,
             'pets' => $pets,
             'sponsoredPets' => $sponsoredPets,
+            'badges' => $user->badges,
+            'globalMilestones' => $globalMilestones,
         ]);
     })->name('dashboard');
 

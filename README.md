@@ -18,6 +18,17 @@ La aplicación está estructurada como un sistema **SPA (Single Page Application
 
 ---
 
+## 🎨 Componentes y Sistema de Diseño Adaptativo
+
+Para garantizar una experiencia premium homogénea y resolver problemas de acoplamiento de estilos y responsividad en dispositivos móviles, el proyecto cuenta con una infraestructura unificada de frontend:
+
+* **Componente de Cabecera Unificado ([Topbar.vue](file:///c:/wamp64/www/adopta/resources/js/Components/Topbar.vue)):** Centraliza la lógica de visualización del logotipo, cálculo dinámico de roles de usuario, distintivos contextuales (badge-role) y menús de navegación/retorno.
+  * **Adaptabilidad Inteligente:** En pantallas grandes y tablets, mantiene una distribución horizontal. En dispositivos móviles (`< 640px`), realiza un apilamiento vertical (`flex-direction: column`) y expande el menú de usuario al ancho total para facilitar la interacción táctil.
+  * **Optimización de Textos:** En pantallas extremadamente estrechas (`< 480px`), oculta automáticamente los saludos largos (ej. "¡Hola, Adoptante Juan!") para optimizar el espacio físico.
+* **Navegación por Pestañas Adaptativa (`.tabs-nav`):** Los selectores de pestañas en los hubs de Bazar, Logística y Radar cuentan con desplazamiento horizontal táctil fluido en pantallas de móvil/tablet (`< 768px`), con ocultamiento estético de las barras de scroll nativas.
+
+---
+
 ## 🌟 Funcionalidades Core
 
 ### 1. Match Inteligente y Postulaciones

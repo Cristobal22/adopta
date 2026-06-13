@@ -1,18 +1,9 @@
 <template>
-  <div class="qr-pass-container">
+  <div class="qr-pass-container" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
     <div class="bg-gradient-circle blob-1"></div>
     <div class="bg-gradient-circle blob-2"></div>
 
-    <header class="header">
-      <div class="logo">
-        <span class="logo-icon">🐾</span>
-        <span class="logo-text">Adopta<span class="logo-dot">.</span></span>
-        <span class="badge-role">Pet Pass</span>
-      </div>
-      <div class="user-menu">
-        <Link href="/" class="btn btn-secondary btn-sm">Volver al Inicio</Link>
-      </div>
-    </header>
+    <Header />
 
     <main class="main-content">
       <!-- Success Flash Alert -->
@@ -163,17 +154,23 @@
         </div>
       </div>
     </main>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 import { Link, router } from '@inertiajs/vue3'
 import { ref } from 'vue'
+import Header from '../../Components/Header.vue'
+import Footer from '../../Components/Footer.vue'
 
 export default {
   name: 'QrPass',
   components: {
     Link,
+    Header,
+    Footer,
   },
   props: {
     pet: Object,

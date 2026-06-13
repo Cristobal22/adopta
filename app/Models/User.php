@@ -96,4 +96,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(Operative::class, 'municipality_id');
     }
+
+    /**
+     * Medallas / Logros obtenidos por el usuario.
+     */
+    public function badges(): HasMany
+    {
+        return $this->hasMany(UserBadge::class);
+    }
 }

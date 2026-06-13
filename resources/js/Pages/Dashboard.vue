@@ -3,14 +3,10 @@
     <div class="bg-gradient-circle blob-1"></div>
     <div class="bg-gradient-circle blob-2"></div>
 
-    <div class="dashboard-card">
-      <header class="header">
-        <div class="logo">
-          <span class="logo-icon">🐾</span>
-          <span class="logo-text">Adopta<span class="logo-dot">.</span></span>
-        </div>
-        <button class="btn btn-secondary btn-sm" @click="logout">Cerrar Sesión</button>
-      </header>
+    <Header />
+
+    <main class="main-content" style="width: 100%; display: flex; justify-content: center; align-items: center; flex-grow: 1; margin-top: 2rem; margin-bottom: 2rem; box-sizing: border-box; padding: 0 1.5rem; position: relative; z-index: 10;">
+      <div class="dashboard-card">
       <div class="welcome-box">
         <h1>Hola, <span class="highlight-text">{{ user.name }}</span>!</h1>
         <p class="role-desc">Tu rol en el ecosistema es: <strong class="role-name text-capitalize">{{ user.role === 'transito' ? 'hogar temporal (tránsito)' : user.role }}</strong></p>
@@ -20,6 +16,18 @@
           <span class="dot" :class="{ verified: user.status === 'verificado' }"></span>
           Perfil de {{ user.role === 'adoptante' ? 'adoptante' : 'hogar temporal' }} {{ user.status === 'verificado' ? 'Verificado' : 'Completo al 50%' }}
         </div>
+      </div>
+
+      <!-- PWA Install Promotion Banner -->
+      <div class="pwa-install-banner" v-if="showPwaBanner">
+        <div class="pwa-banner-content">
+          <span class="pwa-icon-large">📲</span>
+          <div class="pwa-banner-text">
+            <h4>Instalar la App de Adopta</h4>
+            <p>Accede de forma rápida, recibe alertas en tiempo real y colabora de forma ágil.</p>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-sm pwa-install-btn" @click="installPwa">Instalar App</button>
       </div>
 
       <!-- Action hub grid -->
@@ -186,23 +194,68 @@
         </div>
       </div>
 
+      <!-- Mis Logros y Metas Colectivas -->
+      <div class="sponsored-section achievements-section">
+        <h3 class="sponsored-title">🏆 Logros y Metas de la Red</h3>
+        <p class="sponsored-desc">Consulta tus medallas virtuales obtenidas y el progreso de los hitos colectivos de la red.</p>
+        
+        <!-- Medallas del Usuario -->
+        <div class="badges-row-container" style="margin-top: 0.75rem;">
+          <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.5rem; color: var(--color-text-main);">Mis Medallas ({{ badges ? badges.length : 0 }})</h4>
+          <div v-if="badges && badges.length > 0" class="badges-grid" style="display: flex; gap: 0.75rem; flex-wrap: wrap;">
+            <div class="badge-item-card" v-for="badge in badges" :key="badge.id" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.08); padding: 0.5rem 1rem; border-radius: 12px; display: flex; align-items: center; gap: 0.5rem;">
+              <span class="badge-icon-item" style="font-size: 1.25rem;">{{ badge.badge_icon }}</span>
+              <span class="badge-name-item" style="font-size: 0.85rem; font-weight: 600; color: var(--color-text-main);">{{ badge.badge_name }}</span>
+            </div>
+          </div>
+          <div v-else style="background: rgba(255, 255, 255, 0.01); border: 1px dashed rgba(255, 255, 255, 0.08); padding: 1rem; border-radius: 12px; text-align: center; color: var(--color-text-muted); font-size: 0.85rem;">
+            Aún no has desbloqueado medallas. ¡Completa tu perfil o realiza acciones para ganar medallas!
+          </div>
+        </div>
+
+        <!-- Hitos Globales -->
+        <div class="global-milestones-container" style="margin-top: 1.25rem;">
+          <h4 style="font-size: 0.95rem; font-weight: 700; margin-bottom: 0.75rem; color: var(--color-text-main);">Progreso de Metas Globales</h4>
+          <div v-if="globalMilestones && globalMilestones.length > 0" class="milestones-grid" style="display: flex; flex-direction: column; gap: 1rem;">
+            <div class="milestone-progress-card" v-for="m in globalMilestones" :key="m.id" style="background: rgba(255, 255, 255, 0.02); border: 1px solid rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 16px;">
+              <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
+                <span style="font-size: 0.9rem; font-weight: 700; color: var(--color-text-main);">{{ m.name }}</span>
+                <span style="font-size: 0.8rem; font-weight: 700;" :style="{ color: m.is_reached ? '#10b981' : '#f59e0b' }">
+                  {{ m.is_reached ? '¡Alcanzado! 🎉' : `${m.current_value} / ${m.threshold}` }}
+                </span>
+              </div>
+              <div class="progress-bar-container" style="width: 100%; height: 6px; background: rgba(255, 255, 255, 0.05); border-radius: 99px; overflow: hidden;">
+                <div class="progress-bar" :style="{ width: Math.min(100, (m.current_value / m.threshold) * 100) + '%' }" style="height: 100%; background: linear-gradient(90deg, var(--color-primary) 0%, var(--color-secondary) 100%); border-radius: 99px;"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
       <!-- Mapa de Rescates y Abandonos (Leaflet.js) -->
       <div class="map-card" v-if="['admin', 'fundacion', 'rescatista'].includes(user.role) && pets.length > 0">
         <h3 class="map-title">🗺️ Mapa de Rescates y Abandonos</h3>
         <p class="map-desc">Monitoreo geolocalizado en tiempo real para organizar operativos y campañas de esterilización focalizadas.</p>
         <div id="abandon-map" class="abandon-map-container"></div>
       </div>
-    </div>
+      </div>
+    </main>
+
+    <Footer />
   </div>
 </template>
 
 <script>
 import { Link, router } from '@inertiajs/vue3'
-import { onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
+import Header from '../Components/Header.vue'
+import Footer from '../Components/Footer.vue'
 
 export default {
   name: 'Dashboard',
   components: {
+    Header,
+    Footer,
     Link,
   },
   props: {
@@ -214,6 +267,14 @@ export default {
     sponsoredPets: {
       type: Array,
       default: () => []
+    },
+    badges: {
+      type: Array,
+      default: () => []
+    },
+    globalMilestones: {
+      type: Array,
+      default: () => []
     }
   },
   setup(props) {
@@ -221,7 +282,34 @@ export default {
       router.post('/logout')
     }
 
+    const showPwaBanner = ref(false)
+
+    const installPwa = async () => {
+      const promptEvent = window.deferredPrompt
+      if (!promptEvent) return
+
+      promptEvent.prompt()
+      const { outcome } = await promptEvent.userChoice
+      console.log(`PWA install prompt user choice outcome: ${outcome}`)
+
+      window.deferredPrompt = null
+      showPwaBanner.value = false
+    }
+
     onMounted(() => {
+      if (window.deferredPrompt) {
+        showPwaBanner.value = true
+      }
+
+      window.addEventListener('pwa-install-ready', () => {
+        showPwaBanner.value = true
+      })
+
+      window.addEventListener('appinstalled', () => {
+        showPwaBanner.value = false
+        window.deferredPrompt = null
+        console.log('Adopta PWA installed successfully.')
+      })
       if (['admin', 'fundacion', 'rescatista'].includes(props.user.role) && props.pets.length > 0) {
         // Encontrar la primera mascota con coordenadas válidas para centrar el mapa, de lo contrario usar Santiago
         const defaultPet = props.pets.find(p => p.latitude && p.longitude)
@@ -357,7 +445,7 @@ export default {
       return map[statusVal] || statusVal
     }
 
-    return { logout, formatStatus }
+    return { logout, formatStatus, showPwaBanner, installPwa }
   }
 }
 </script>
@@ -367,11 +455,11 @@ export default {
 .dashboard-container {
   min-height: 100vh;
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  justify-content: space-between;
   align-items: center;
   position: relative;
   overflow: hidden;
-  padding: 3rem 1.5rem;
   box-sizing: border-box;
 }
 
@@ -722,5 +810,95 @@ export default {
 .sponsored-status {
   font-size: 0.75rem;
   color: var(--color-text-muted);
+}
+
+/* PWA Banner Styles */
+.pwa-install-banner {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.1) 0%, rgba(255, 107, 74, 0.1) 100%);
+  border: 1px dashed rgba(139, 92, 246, 0.3);
+  border-radius: 16px;
+  padding: 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1.5rem;
+  box-sizing: border-box;
+}
+
+@media (max-width: 576px) {
+  .pwa-install-banner {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    gap: 1rem;
+  }
+}
+
+.pwa-banner-content {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+@media (max-width: 576px) {
+  .pwa-banner-content {
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+}
+
+.pwa-icon-large {
+  font-size: 2.25rem;
+  background: rgba(139, 92, 246, 0.15);
+  width: 50px;
+  height: 50px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
+  flex-shrink: 0;
+}
+
+.pwa-banner-text {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  text-align: left;
+}
+
+@media (max-width: 576px) {
+  .pwa-banner-text {
+    text-align: center;
+  }
+}
+
+.pwa-banner-text h4 {
+  font-family: var(--font-title);
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin: 0;
+  color: var(--color-text-main);
+}
+
+.pwa-banner-text p {
+  font-size: 0.8rem;
+  color: var(--color-text-muted);
+  line-height: 1.4;
+  margin: 0;
+}
+
+.pwa-install-btn {
+  background: linear-gradient(135deg, var(--color-primary) 0%, var(--color-secondary) 100%);
+  color: white !important;
+  box-shadow: 0 4px 10px rgba(255, 107, 74, 0.25);
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+}
+
+.pwa-install-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 14px rgba(255, 107, 74, 0.35);
 }
 </style>
