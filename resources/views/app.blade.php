@@ -10,17 +10,42 @@
         <meta name="robots" content="index, follow">
         <meta name="keywords" content="adopcion de mascotas, rescate animal, tenencia responsable, bienestar animal, buscar mascotas, fundaciones de animales">
 
+        @php
+            $ogTitle = "Adopta - Ecosistema de Bienestar Animal";
+            $ogDescription = "Conectando de forma eficiente y segura a adoptantes con mascotas para fomentar la tenencia responsable.";
+            $ogImage = asset('images/og-image.jpg');
+
+            if (request()->routeIs('pets.story')) {
+                $petParam = request()->route('pet');
+                $pet = null;
+                if ($petParam instanceof \App\Models\Pet) {
+                    $pet = $petParam;
+                } elseif ($petParam) {
+                    $pet = \App\Models\Pet::find($petParam);
+                }
+                
+                if ($pet) {
+                    $ogTitle = "La Nueva Vida de " . $pet->name . " 💖";
+                    $ogDescription = $pet->description ?: "Sigue de cerca la historia de adaptación y finales felices de " . $pet->name . " en su nuevo hogar.";
+                    if ($pet->photo_path) {
+                        $ogImage = asset($pet->photo_path);
+                    }
+                }
+            }
+        @endphp
+
         <!-- Open Graph / Facebook -->
         <meta property="og:type" content="website">
-        <meta property="og:title" content="Adopta - Ecosistema Integral de Rescate y Adopción Animal">
-        <meta property="og:description" content="Conectando de forma eficiente y segura a adoptantes con mascotas para erradicar el abandono y fomentar la tenencia responsable.">
+        <meta property="og:title" content="{{ $ogTitle }}">
+        <meta property="og:description" content="{{ $ogDescription }}">
         <meta property="og:url" content="{{ url()->current() }}">
-        <meta property="og:image" content="{{ asset('images/og-image.jpg') }}">
+        <meta property="og:image" content="{{ $ogImage }}">
 
         <!-- Twitter -->
         <meta property="twitter:card" content="summary_large_image">
-        <meta property="twitter:title" content="Adopta - Ecosistema Integral de Rescate y Adopción Animal">
-        <meta property="twitter:description" content="Conectando de forma eficiente y segura a adoptantes con mascotas para erradicar el abandono.">
+        <meta property="twitter:title" content="{{ $ogTitle }}">
+        <meta property="twitter:description" content="{{ $ogDescription }}">
+        <meta property="twitter:image" content="{{ $ogImage }}">
 
         <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
 

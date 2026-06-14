@@ -1,4 +1,8 @@
 <template>
+  <Head>
+    <title>La Nueva Vida de {{ pet.name }} 💖 - Adopta</title>
+    <meta name="description" :content="pet.description || 'Mira el hermoso caso de éxito de adopción responsable en nuestra plataforma.'" />
+  </Head>
   <div class="public-story-container" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
     <div class="bg-gradient-circle blob-1"></div>
     <div class="bg-gradient-circle blob-2"></div>
@@ -124,7 +128,7 @@
 </template>
 
 <script>
-import { Link } from '@inertiajs/vue3'
+import { Link, Head } from '@inertiajs/vue3'
 import { ref } from 'vue'
 import Header from '../../Components/Header.vue'
 import Footer from '../../Components/Footer.vue'
@@ -133,6 +137,7 @@ export default {
   name: 'PublicStory',
   components: {
     Link,
+    Head,
     Header,
     Footer,
   },
