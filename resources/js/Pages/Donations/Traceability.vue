@@ -83,7 +83,7 @@
             <!-- Make Donation Form -->
             <div class="card">
               <h3>💖 Apadrinar o Donar Dinero</h3>
-              <p class="card-desc">Simula tu aporte a través de la pasarela segura de MercadoPago. Sumas puntos de Huellas por tu apoyo financiero.</p>
+              <p class="card-desc">Simula tu aporte a través de la pasarela segura de Flow.cl. Sumas puntos de Huellas por tu apoyo financiero.</p>
 
               <!-- Tabs: Direct Donation or Kit Sponsorship -->
               <div class="tabs-nav" style="margin-bottom: 1.5rem;">
@@ -112,7 +112,7 @@
                   </div>
 
                   <button type="submit" class="btn btn-primary btn-block" :disabled="form.processing">
-                    {{ form.processing ? 'Procesando checkout...' : 'Donar con MercadoPago' }}
+                    {{ form.processing ? 'Procesando checkout...' : 'Donar con Flow.cl' }}
                   </button>
                 </form>
               </div>
@@ -127,7 +127,7 @@
                   </div>
 
                   <button type="submit" class="btn btn-success btn-block" :disabled="form.processing">
-                    {{ form.processing ? 'Procesando checkout...' : 'Apadrinar Kit ($15.000 CLP) con MercadoPago' }}
+                    {{ form.processing ? 'Procesando checkout...' : 'Apadrinar Kit ($15.000 CLP) con Flow.cl' }}
                   </button>
                 </form>
               </div>

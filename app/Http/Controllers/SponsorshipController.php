@@ -71,11 +71,11 @@ class SponsorshipController extends Controller
             ]);
         }
 
-        // Simulación de URL de pago seguro de MercadoPago para SiteGround / Sandbox
-        $sandboxCheckoutUrl = "https://www.mercadopago.cl/sandbox/checkout/preference?pref_id=spon_" . md5($sponsorship->id . time());
+        // Simulación de URL de pago seguro de Flow.cl (Staging / Sandbox)
+        $sandboxCheckoutUrl = "https://sandbox.flow.cl/app/pay.php?token=" . md5($sponsorship->id . time());
 
         return redirect()->route('pets.index')
-            ->with('success', '¡Gracias por apadrinar a ' . $pet->name . '! Tu suscripción ' . ucfirst($request->tier) . ' fue procesada.')
+            ->with('success', '¡Gracias por apoyar a ' . $pet->name . '! Suscripción iniciada. Redirigiendo a pasarela segura de Flow.cl...')
             ->with('checkout_url', $sandboxCheckoutUrl);
     }
 

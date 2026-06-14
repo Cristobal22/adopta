@@ -14,16 +14,16 @@
           <p class="subtitle">Canjea tus puntos por recompensas y apoya a emprendedores locales certificados.</p>
         </div>
 
-        <!-- Flash messages for Cupón / MercadoPago Checkout Link -->
+        <!-- Flash messages for Cupón / Flow.cl Checkout Link -->
         <div class="flash-alert success-alert" v-if="$page.props.flash.success">
           <div class="alert-content">
             <span class="alert-icon">✓</span>
             <div>
               <strong>Acción Procesada:</strong> {{ $page.props.flash.success }}
-              <!-- MercadoPago Checkout Button -->
+              <!-- Flow.cl Checkout Button -->
               <div v-if="$page.props.flash.checkout_url" style="margin-top: 1rem;">
                 <a :href="$page.props.flash.checkout_url" target="_blank" class="btn btn-mercadopago">
-                  💳 Pagar con MercadoPago
+                  💳 Pagar con Flow.cl
                 </a>
               </div>
             </div>
@@ -120,7 +120,7 @@
           </div>
         </div>
 
-        <!-- TAB 3: PREMIUM SUBSCRIPTIONS (MERCADOPAGO CHEKOUT) -->
+        <!-- TAB 3: PREMIUM SUBSCRIPTIONS (FLOW.CL CHEKOUT) -->
         <div v-show="currentTab === 'premium'" class="premium-container">
           <div class="premium-grid">
             <div class="plan-card">
@@ -136,7 +136,7 @@
               </ul>
 
               <button class="btn btn-primary btn-block" @click="initiatePremiumPlan('Suscripción Visibilidad Bronce', 4990)">
-                💳 Suscribirse con MercadoPago
+                💳 Suscribirse con Flow.cl
               </button>
             </div>
 
@@ -154,7 +154,7 @@
               </ul>
 
               <button class="btn btn-primary btn-block" @click="initiatePremiumPlan('Suscripción Visibilidad Oro', 9990)">
-                💳 Suscribirse con MercadoPago
+                💳 Suscribirse con Flow.cl
               </button>
             </div>
           </div>

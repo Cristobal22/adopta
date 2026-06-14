@@ -102,36 +102,6 @@
                 <span class="hint-text">Enviaremos actualizaciones sobre {{ pet.name }} aquí.</span>
               </div>
 
-              <!-- Mock Credit Card Info -->
-              <div class="payment-box">
-                <div class="payment-header">
-                  <span>💳 Pago Seguro Simulado</span>
-                  <span class="card-brands">Visa / Mastercard / MP</span>
-                </div>
-                
-                <div class="form-group">
-                  <label for="card_num">Número de Tarjeta</label>
-                  <input 
-                    type="text" 
-                    id="card_num" 
-                    placeholder="4557 •••• •••• 8812" 
-                    value="4557 1234 5678 8812" 
-                    disabled
-                  />
-                </div>
-
-                <div class="form-row">
-                  <div class="form-group">
-                    <label for="card_exp">Vencimiento</label>
-                    <input type="text" id="card_exp" placeholder="12/29" value="12/29" disabled />
-                  </div>
-                  <div class="form-group">
-                    <label for="card_cvv">CVV</label>
-                    <input type="text" id="card_cvv" placeholder="123" value="123" disabled />
-                  </div>
-                </div>
-              </div>
-
               <!-- Total Row -->
               <div class="total-row">
                 <span>Total a Pagar:</span>
@@ -140,7 +110,7 @@
 
               <!-- Submit Button -->
               <button type="submit" class="btn btn-primary btn-block" :disabled="form.processing">
-                {{ form.processing ? 'Procesando...' : '💳 Confirmar y Apadrinar con MercadoPago' }}
+                {{ form.processing ? 'Procesando...' : '💳 Ir a pagar de forma segura con Flow.cl' }}
               </button>
 
               <!-- Legal / Transparency Note -->

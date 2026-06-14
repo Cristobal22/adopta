@@ -15,7 +15,7 @@
               <div>{{ $page.props.flash.success }}</div>
               <div v-if="$page.props.flash.checkout_url" style="margin-top: 0.75rem;">
                 <a :href="$page.props.flash.checkout_url" target="_blank" class="btn btn-primary btn-sm" style="background: #0d9488; color: white;">
-                  💳 Completar Pago Seguro en MercadoPago
+                  💳 Completar Pago Seguro en Flow.cl
                 </a>
               </div>
             </div>

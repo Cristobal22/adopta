@@ -52,7 +52,7 @@ class DonationController extends Controller
     }
 
     /**
-     * Procesa la donación y simula la pasarela de pagos de MercadoPago.
+     * Procesa la donación y simula la pasarela de pagos de Flow.cl.
      */
     public function initiateDonation(Request $request): RedirectResponse
     {
@@ -63,11 +63,11 @@ class DonationController extends Controller
             'kit_id' => ['nullable', 'string'],
         ]);
 
-        // Registrar la donación como aprobada simulando el éxito de MercadoPago
+        // Registrar la donación como aprobada simulando el éxito de Flow.cl
         $donation = Donation::create([
             'user_id' => $user->id,
             'amount' => $request->amount,
-            'payment_id' => 'mp_pay_' . md5($user->id . time()),
+            'payment_id' => 'flow_pay_' . md5($user->id . time()),
             'kit_id' => $request->kit_id,
             'status' => 'aprobado',
         ]);

@@ -134,32 +134,25 @@ class BazarController extends Controller
             'price' => ['required', 'numeric', 'min:1'],
         ]);
 
-        // Simulación de interacción con la API de MercadoPago para SiteGround:
-        // En una integración real, instanciaríamos el SDK de MercadoPago y crearíamos una Preference:
+        // Simulación de interacción con la API de Flow.cl para SiteGround:
+        // En una integración real, instanciaríamos el cliente de Flow.cl y generaríamos una transacción:
         //
-        // SDK::setAccessToken(config('services.mercadopago.token'));
-        // $preference = new Preference();
-        // $item = new Item();
-        // $item->title = $request->plan_name;
-        // $item->quantity = 1;
-        // $item->unit_price = $request->price;
-        // $preference->items = [$item];
-        // $preference->save();
-        //
-        // $initPoint = $preference->init_point;
+        // $flow = new Flow($config);
+        // $response = $flow->payment->create($params);
+        // $sandboxCheckoutUrl = $response->getUrl();
         
-        // Simulamos la generación del checkout_url retornado por la pasarela de MercadoPago
-        $sandboxCheckoutUrl = "https://www.mercadopago.cl/sandbox/checkout/preference?pref_id=mp_" . md5($user->id . time());
+        // Simulamos la generación del checkout_url retornado por la pasarela de Flow.cl
+        $sandboxCheckoutUrl = "https://sandbox.flow.cl/app/pay.php?token=" . md5($user->id . time());
 
         // Auditamos el inicio de pago
-        AuditService::log('initiate_mercadopago_checkout', $user, null, [
+        AuditService::log('initiate_flow_checkout', $user, null, [
             'plan' => $request->plan_name,
             'price' => $request->price,
             'url' => $sandboxCheckoutUrl,
         ]);
 
-        // Redireccionamos a la pantalla externa de MercadoPago (en producción sería un redirect externo)
+        // Redireccionamos a la pantalla externa de Flow.cl (en producción sería un redirect externo)
         // Para propósitos locales de demostración, devolvemos un flash para simular el click
-        return back()->with('checkout_url', $sandboxCheckoutUrl)->with('success', 'Plan Premium iniciado. Redirigiendo a pasarela segura de MercadoPago...');
+        return back()->with('checkout_url', $sandboxCheckoutUrl)->with('success', 'Plan Premium iniciado. Redirigiendo a pasarela segura de Flow.cl...');
     }
 }
