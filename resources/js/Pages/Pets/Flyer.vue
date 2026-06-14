@@ -662,7 +662,8 @@ export default {
       if (props.pet.photo_path) {
         petImageObj = new Image()
         petImageObj.crossOrigin = 'anonymous' // Evitar problemas de CORS locales
-        petImageObj.src = '/' + props.pet.photo_path
+        const base = window.location.origin + (window.location.pathname.startsWith('/adopta/public') ? '/adopta/public' : '')
+        petImageObj.src = base + '/' + props.pet.photo_path
         petImageObj.onload = () => {
           drawFlyer()
         }
