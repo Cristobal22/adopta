@@ -142,6 +142,9 @@
                     <Link :href="'/pets/' + pet.id + '/qr-pass'" class="btn btn-secondary btn-sm" title="Ver QR Pass">
                       🎫 Qr Pass
                     </Link>
+                    <Link :href="'/pets/' + pet.id + '/flyer'" class="btn btn-secondary btn-sm" title="Generar Flyer">
+                      🖼️ Flyer
+                    </Link>
                     <button class="btn btn-secondary btn-sm" @click="sharePet(pet)" title="Compartir">
                       🔗 Compartir
                     </button>
@@ -163,6 +166,14 @@
                     </Link>
                     <Link :href="'/pets/' + pet.id + '/qr-pass'" class="btn btn-secondary btn-sm" v-if="pet.status === 'adoptado'">
                       🎫 Qr Pass
+                    </Link>
+                    <Link 
+                      :href="'/pets/' + pet.id + '/flyer'" 
+                      class="btn btn-secondary btn-sm" 
+                      v-if="pet.status !== 'adoptado'"
+                      title="Generar Flyer"
+                    >
+                      🖼️ Flyer
                     </Link>
                     <button class="btn btn-secondary btn-sm" @click="sharePet(pet)" title="Compartir">
                       🔗 Compartir

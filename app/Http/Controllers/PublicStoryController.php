@@ -25,6 +25,7 @@ class PublicStoryController extends Controller
             'age_text' => $pet->age_text,
             'description' => $pet->description,
             'photo_path' => $pet->photo_path,
+            'status' => $pet->status,
         ];
 
         $adoptionData = null;

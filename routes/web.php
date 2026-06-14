@@ -42,6 +42,7 @@ Route::get('/nosotros', function () {
 Route::get('/bazar', [BazarController::class, 'showBazarHub'])->name('bazar.hub');
 Route::get('/pets', [PetController::class, 'index'])->name('pets.index');
 Route::get('/pets/{pet}/story', [PublicStoryController::class, 'showStory'])->name('pets.story');
+Route::get('/pets/{pet}/flyer', [\App\Http\Controllers\FlyerController::class, 'show'])->name('pets.flyer');
 Route::get('/adoptions/{adoption}/diaries/{diary}/photo', [DiaryController::class, 'showPhoto'])->name('adoptions.diaries.photo');
 
 

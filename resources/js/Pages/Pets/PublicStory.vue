@@ -1,7 +1,8 @@
 <template>
   <Head>
-    <title>La Nueva Vida de {{ pet.name }} 💖 - Adopta</title>
-    <meta name="description" :content="pet.description || 'Mira el hermoso caso de éxito de adopción responsable en nuestra plataforma.'" />
+    <title v-if="pet.status === 'adoptado'">La Nueva Vida de {{ pet.name }} 💖 - Adopta</title>
+    <title v-else>Conoce a {{ pet.name }} 🐾 - Adopta</title>
+    <meta name="description" :content="pet.description || 'Mira la ficha y detalles de esta mascota en nuestra plataforma de adopción.'" />
   </Head>
   <div class="public-story-container" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: space-between;">
     <div class="bg-gradient-circle blob-1"></div>
@@ -15,18 +16,22 @@
         <div class="profile-photo-wrapper">
           <img v-if="pet.photo_path" :src="'/' + pet.photo_path" :alt="pet.name" class="profile-img" />
           <div v-else class="profile-emoji-fallback">🐾</div>
-          <span class="badge-adopted">Adoptado 💖</span>
+          <span class="badge-adopted" v-if="pet.status === 'adoptado'">Adoptado 💖</span>
+          <span class="badge-seeking" v-else-if="pet.status === 'en_adopcion'">Buscando Hogar 🏠</span>
+          <span class="badge-seeking" v-else-if="pet.status === 'rescatado'">Rescatado 🐾</span>
+          <span class="badge-seeking" v-else-if="pet.status === 'en_transito'">En Tránsito 🏡</span>
         </div>
 
         <div class="profile-info">
-          <h1>La Nueva Vida de <span class="highlight-text">{{ pet.name }}</span></h1>
+          <h1 v-if="pet.status === 'adoptado'">La Nueva Vida de <span class="highlight-text">{{ pet.name }}</span></h1>
+          <h1 v-else>Conoce a <span class="highlight-text">{{ pet.name }}</span> 🐾</h1>
           <p class="profile-meta">
             {{ pet.species === 'perro' ? '🐕 Perro' : '🐈 Gato' }} • {{ pet.breed || 'Mestizo' }} • {{ pet.age_text }}
           </p>
           <p class="profile-desc" v-if="pet.description">
             {{ pet.description }}
           </p>
-          <div class="adoption-milestone" v-if="adoption">
+          <div class="adoption-milestone" v-if="pet.status === 'adoptado' && adoption">
             <span class="milestone-icon">🏠</span>
             <div class="milestone-text">
               <strong>Adoptado el {{ formatDate(adoption.updated_at) }}</strong>
@@ -38,31 +43,40 @@
 
       <!-- Reactions Panel -->
       <section class="reactions-card card">
-        <h4>Envía cariño a {{ pet.name }} y su nueva familia</h4>
+        <h4 v-if="pet.status === 'adoptado'">Envía cariño a {{ pet.name }} y su nueva familia</h4>
+        <h4 v-else>Envía cariño y apoya la búsqueda de hogar de {{ pet.name }} 🐾</h4>
         <div class="reactions-list">
           <button class="reaction-btn" @click="incrementReaction('love')">
             <span class="react-emoji">💖</span>
             <span class="react-count">{{ reactions.love }}</span>
-            <span class="react-label">Me alegra</span>
+            <span class="react-label" v-if="pet.status === 'adoptado'">Me alegra</span>
+            <span class="react-label" v-else>Me interesa</span>
           </button>
           <button class="reaction-btn" @click="incrementReaction('cheers')">
             <span class="react-emoji">👏</span>
             <span class="react-count">{{ reactions.cheers }}</span>
-            <span class="react-label">¡Bravo!</span>
+            <span class="react-label" v-if="pet.status === 'adoptado'">¡Bravo!</span>
+            <span class="react-label" v-else>¡Apoyar!</span>
           </button>
           <button class="reaction-btn" @click="incrementReaction('party')">
             <span class="react-emoji">🎉</span>
             <span class="react-count">{{ reactions.party }}</span>
-            <span class="react-label">Felicidades</span>
+            <span class="react-label" v-if="pet.status === 'adoptado'">Felicidades</span>
+            <span class="react-label" v-else>Compartir</span>
           </button>
         </div>
       </section>
 
       <!-- Share Pet Story Card -->
       <section class="share-card card">
-        <h4>📢 Comparte la historia de {{ pet.name }} en redes sociales</h4>
-        <p class="share-desc">Ayúdanos a difundir este caso de éxito para inspirar a más familias a adoptar y apadrinar de forma responsable.</p>
+        <h4 v-if="pet.status === 'adoptado'">📢 Comparte la historia de {{ pet.name }} en redes sociales</h4>
+        <h4 v-else>📢 Comparte a {{ pet.name }} para ayudar a su adopción</h4>
+        <p class="share-desc" v-if="pet.status === 'adoptado'">Ayúdanos a difundir este caso de éxito para inspirar a más familias a adoptar y apadrinar de forma responsable.</p>
+        <p class="share-desc" v-else>Ayúdanos a difundir la ficha de {{ pet.name }}. Genera una gráfica personalizada lista para compartir en tus redes o WhatsApp.</p>
         <div class="share-buttons-row">
+          <Link v-if="pet.status !== 'adoptado'" :href="'/pets/' + pet.id + '/flyer'" class="btn btn-share-social flyer-btn" style="background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); color: white !important; font-weight: 700; border: none;">
+            🖼️ Generar Flyer de Adopción
+          </Link>
           <button @click="shareSocial('whatsapp')" class="btn btn-share-social whatsapp-btn">
             🟢 WhatsApp
           </button>
@@ -73,13 +87,13 @@
             ⚫ Twitter / X
           </button>
           <button @click="shareSocial('native')" class="btn btn-share-social native-btn">
-            🔗 Compartir Enlace
+            🔗 Copiar Enlace
           </button>
         </div>
       </section>
 
       <!-- Success Timeline / Gallery -->
-      <section class="timeline-section">
+      <section class="timeline-section" v-if="pet.status === 'adoptado'">
         <h2 class="timeline-title">📈 Bitácoras de Evolución</h2>
         <p class="timeline-subtitle">Sigue de cerca las actualizaciones públicas autorizadas sobre su adaptación en su nuevo hogar.</p>
 
@@ -112,7 +126,15 @@
 
       <!-- CTA Card to Adopt -->
       <section class="cta-bottom-card card">
-        <div class="cta-content">
+        <div class="cta-content" v-if="pet.status !== 'adoptado'">
+          <h3>¿Te gustaría darle un hogar a {{ pet.name }}? 🏠</h3>
+          <p>Puedes iniciar el proceso de postulación a adopción o convertirte en su padrino/madrina virtual para apoyar sus gastos de alimentación y salud.</p>
+          <div class="cta-buttons">
+            <button class="btn btn-primary" @click="$inertia.visit('/pets')">🐾 Solicitar Adopción</button>
+            <Link :href="'/pets/' + pet.id + '/sponsor'" class="btn btn-secondary">💖 Apadrinar a {{ pet.name }}</Link>
+          </div>
+        </div>
+        <div class="cta-content" v-else>
           <h3>¿Quieres ser el héroe de otra mascota?</h3>
           <p>Hay cientos de animales esperando una familia en nuestra plataforma. Encuentra a tu compañero ideal hoy mismo.</p>
           <div class="cta-buttons">
@@ -487,6 +509,21 @@ export default {
   border-radius: 99px;
   white-space: nowrap;
   box-shadow: 0 4px 12px rgba(255, 107, 74, 0.3);
+}
+
+.badge-seeking {
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #f59e0b;
+  color: white;
+  font-weight: 800;
+  font-size: 0.85rem;
+  padding: 0.4rem 1rem;
+  border-radius: 99px;
+  white-space: nowrap;
+  box-shadow: 0 4px 12px rgba(245, 158, 11, 0.3);
 }
 
 .profile-info h1 {
