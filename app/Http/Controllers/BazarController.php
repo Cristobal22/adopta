@@ -123,7 +123,7 @@ class BazarController extends Controller
     }
 
     /**
-     * Simulación de pago y suscripciones Premium en el Bazar mediante MercadoPago.
+     * Simulación de pago y suscripciones Premium en el Bazar mediante Flow.cl.
      */
     public function purchasePremiumPlan(Request $request): RedirectResponse
     {

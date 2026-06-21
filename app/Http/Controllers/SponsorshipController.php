@@ -24,7 +24,7 @@ class SponsorshipController extends Controller
     }
 
     /**
-     * Procesa la solicitud de apadrinamiento simulando el pago con MercadoPago.
+     * Procesa la solicitud de apadrinamiento simulando el pago con Flow.cl.
      */
     public function processSponsorship(Request $request, Pet $pet): RedirectResponse
     {
